@@ -68,4 +68,22 @@ class SecurityRobot(Robot):
             raise InsufficientBatteryError(self.name, self.task_cost, self.battery)
 
         self.battery -= self.task_cost
-        print(f"{self.name} is patrolling {self.patrole_zone}ft.")
+        print(f"{self.name} is patrolling {self.patrol_zone}ft.")
+
+def fleet_report(robots):
+    for robot in robots:
+        try:
+            robot.perform_task()
+        except InsufficientBatteryError as error:
+            print(f"[{robot.name} FAILED] {error}")
+
+
+# Test fleet_report
+if __name__ == "__main__":
+    my_robots = [ 
+        CleaningRobot("Cleaner1", battery = 100),
+        SecurityRobot("Security1", battery = 100),
+        CleaningRobot("Cleaner2", battery = 10)
+    ]
+
+    fleet_report(my_robots)
