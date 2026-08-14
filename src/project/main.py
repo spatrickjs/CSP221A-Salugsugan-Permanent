@@ -25,12 +25,18 @@ class Robot(ABC):
     manufacturer = "Robots"
     population  = 0
 
+    repair_history = []
+
     def __init__(self, name: str, battery: int = 100):
         self.name = name
         self._battery = 0
         self.battery = battery
 
         Robot.population += 1
+
+    @classmethod
+    def from_dict(cls, config: dict):
+        return cls(**config)
 
     @property
     def battery(self) -> int:
