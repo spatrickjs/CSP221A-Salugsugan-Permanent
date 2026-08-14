@@ -4,7 +4,7 @@ import unittest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from project.main import CleaningRobot, SecurityRobot, InsufficientBatteryError
+from project.main import CleaningRobot, SecurityRobot, InsufficientBatteryError, fleet_report, run_task_safely
 
 class TestRobots(unittest.TestCase):
     def test_battery_limits(self):
@@ -23,6 +23,25 @@ class TestRobots(unittest.TestCase):
         security = SecurityRobot("SecurityBot", battery = 10, patrol_zone = "Zone  1")
         with self.assertRaises(InsufficientBatteryError):
             security.perform_task()
+
+    # Test fleet_report and run_task_safely functions
+    def test_fleet_report_execution(self):
+        robots = [
+            CleaningRobot("Cleaner1", battery = 100),
+            SecurityRobot("Security1", battery = 100)
+        ]
+
+        fleet_report(robots)
+
+    def test_run_task_safely_success(self):
+        robot = CleaningRobot("Cleaner1", battery = 100)
+        run_task_safely(robot)
+
+    def test_run_task_safely_insufficient_batter(self):
+        # Test if function handles insufficient battery correctly
+        robot = CleaningRobot("Cleaner2", battery = 10)
+        run_task_safely(robot)
+
 
 if __name__ == '__main__':
     unittest.main()
