@@ -42,6 +42,27 @@ class TestRobots(unittest.TestCase):
         robot = CleaningRobot("Cleaner2", battery = 10)
         run_task_safely(robot)
 
+    #test constructor
+    def test_alternative_constructor(self):
+        cleaner_config = {"name": "AutoClean", "battery": 75, "dust_capacity": 10}
+
+        new_robot = CleaningRobot.from_dict(cleaner_config)
+
+        self.assertEqual(new_robot.name, "AutoClean")
+        self.assertEqual(new_robot.battery, 75)
+        self.assertEqual(new_robot.dust_capacity, 10)
+        self.assertIsInstance(new_robot, CleaningRobot)
+
+    #test trap
+    def test_mutable_attribute_trap(self):
+        bot1 = CleaningRobot("TrapRobot1")
+        bot2 = SecurityRobot("TrapRobot2")
+
+        bot1.repair_history.append("Repaired hardware")
+
+        self.assertEqual(len(bot2.repair_history),  1)
+        self.assertIn("Repaired hardware", bot2.repair_history)
+        self.assertIs(bot1.repair_history, bot2.repair_history)
 
 if __name__ == '__main__':
     unittest.main()
