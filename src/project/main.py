@@ -1,5 +1,15 @@
 from abc import ABC, abstractmethod
 
+def log_action(func):
+    def wrapper(self, *args, **kwargs):
+        print(f"[LOG] Process: '{func.__name__}' for {self.name} started.")
+
+        result = func(self, *args, **kwargs)
+
+        print(f"[LOG] Process: '{func.__name__}' for {self.name} finished.")
+        return result
+    return wrapper
+
 class InsufficientBatteryError(Exception):
     def  __init__(self, robot_name: str, required: int, available: int):
         self.robot_name = robot_name
@@ -50,6 +60,7 @@ class CleaningRobot(Robot):
         self.dust_capacity = dust_capacity
         self.task_cost = 15  # Cleaning battery cost
 
+    @log_action
     def perform_task(self):
         if self.battery < self.task_cost:
             raise InsufficientBatteryError(self.name, self.task_cost, self.battery)
@@ -63,6 +74,7 @@ class SecurityRobot(Robot):
         self.patrol_zone = patrol_zone
         self.task_cost = 30 # Patrol battery cost
 
+    @log_action
     def perform_task(self):
         if self.battery < self.task_cost:
             raise InsufficientBatteryError(self.name, self.task_cost, self.battery)
