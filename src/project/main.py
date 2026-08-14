@@ -77,10 +77,6 @@ def fleet_report(robots):
         except InsufficientBatteryError as error:
             print(f"[{robot.name} FAILED] {error}")
 
-def run_task_safetly(robot):
-    print(f"Running {robot.name} unsafely...")
-    robot.perform_task()
-
 
 # Test fleet_report
 if __name__ == "__main__":
